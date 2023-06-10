@@ -9,3 +9,4 @@ export const POST_SIGNIN = "/auth/signin"
 export const POST_CREATETODO = "/todos"
 export const GET_GETTODO = "/todos"
 export const PUT_UPDATETODO = `/todos/:${id}`
+export const DELETE_DELETETODO = `/todos/:${id}`

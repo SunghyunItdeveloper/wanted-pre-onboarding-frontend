@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   TodoContainer,
   TodoWrapper,
@@ -21,13 +21,22 @@ const Todo = () => {
     setInput(e.target.value);
   };
 
-  const handleTodoSubmit = () => { 
+  const handleTodoSubmit = () => {
     if (input) {
       const newTodo = { text: input, completed: false };
       setTodos([...todos, newTodo]);
       setInput('');
+  
+      // 변경된 todos를 localStorage에 저장
+      localStorage.setItem('todos', JSON.stringify([...todos, newTodo])); 
     }
   };
+  useEffect(() => {
+    const storedTodos = localStorage.getItem('todos');
+    if (storedTodos) {
+      setTodos(JSON.parse(storedTodos));
+    }
+  }, []);
 
   const handleTodoDelete = (index) => {
     const updatedTodos = todos.filter((_, i) => i !== index);
