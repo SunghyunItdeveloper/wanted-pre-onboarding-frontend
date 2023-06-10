@@ -1,0 +1,83 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ButtonContainer, ForgotPassword, HorizontalRule, InputContainer, LoginWith, MembershipContainer, MembershipWrap, WelcomeText } from './Membership.style';
+import { StyledInput } from '../../api/components/common/input.style';
+
+const Membership = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(false);
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handleSignup = () => {
+    if (!email.includes('@') || password.length < 8) {
+      setError(true);
+    } else {
+      alert("회원가입이 완료되었습니다")
+      // 회원가입 로직을 여기에 작성하세요.
+      // 회원가입이 성공적으로 완료되면 /signin 경로로 리다이렉트합니다.
+      navigate('/signin');
+    }
+  };
+
+  const handleSignin = () => {
+    if (!email.includes('@') || password.length < 8) {
+      setError(true);
+    } else {
+      // 로그인 로직을 여기에 작성하세요.
+      // 로그인이 성공적으로 완료되면 JWT를 로컬 스토리지에 저장하고 /todo 경로로 리다이렉트합니다.
+      const jwtToken = '여기에 JWT 토큰을 저장하세요';
+      localStorage.setItem('jwtToken', jwtToken);
+      navigate('/todo');
+    }
+  };
+
+  return (
+    <>
+      <MembershipContainer>
+        <MembershipWrap>
+          <WelcomeText>회원가입</WelcomeText>
+          <InputContainer>
+            <StyledInput
+              type="text"
+              placeholder="이메일"
+              value={email}
+              onChange={handleEmailChange}
+              data-testid="email-input"
+            />
+            <StyledInput
+              type="password"
+              placeholder="비밀번호"
+              value={password}
+              onChange={handlePasswordChange}
+              data-testid="password-input"
+            />
+          </InputContainer>
+          <ButtonContainer>
+            <button
+              content="회원가입"
+              onClick={handleSignup}
+              data-testid="signup-button"
+              disabled={!email.includes('@') || password.length < 8}
+            >
+              회원가입 완료
+            </button>
+          </ButtonContainer>
+          <LoginWith>또는 간편로그인</LoginWith>
+          <HorizontalRule />
+          <ForgotPassword>비밀번호를 잊어버리셨나요?</ForgotPassword>
+        </MembershipWrap>
+      </MembershipContainer>
+    </>
+  );
+};
+
+export default Membership;
