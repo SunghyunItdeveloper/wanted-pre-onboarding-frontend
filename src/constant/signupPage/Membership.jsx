@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ButtonContainer, ForgotPassword, HorizontalRule, InputContainer, LoginWith, MembershipContainer, MembershipWrap, WelcomeText } from './Membership.style';
 import { StyledInput } from '../../components/common/input.style';
+import axiosinstance from '../../api/AxiosInstance';
+import { POST_SIGNUP } from '../../api/apiUrl';
 
 const Membership = () => {
   const navigate = useNavigate();
@@ -17,19 +19,25 @@ const Membership = () => {
     setPassword(event.target.value);
   };
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     if (!email.includes('@') || password.length < 8) {
       setError(true);
     } else {
-      alert("회원가입이 완료되었습니다")
-      // 회원가입 로직을 여기에 작성하세요.
-      // 회원가입이 성공적으로 완료되면 /signin 경로로 리다이렉트합니다.
-      navigate('/signin');
+      try {
+        const response = await axiosinstance.post(POST_SIGNUP, { email, password });
+        if (response.status === 201) {
+          console.log(response,'성공하였습니다')
+          alert("회원가입이 완료되었습니다");
+          navigate('/signin');
+        } else {
+          // 회원가입 실패 처리
+        }
+      } catch (error) {
+        console.log(error,"실패하였습니다")
+        alert('회원가입을 실패하였습니다.')
+      }
     }
   };
-
-  
-
   return (
     <>
       <MembershipContainer>
