@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ButtonContainer, ForgotPassword, HorizontalRule, InputContainer, LoginWith, MembershipContainer, MembershipWrap, WelcomeText } from './Membership.style';
-import { StyledInput } from '../../api/components/common/input.style';
+import { StyledInput } from '../../components/common/input.style';
 
 const Membership = () => {
   const navigate = useNavigate();
@@ -28,17 +28,7 @@ const Membership = () => {
     }
   };
 
-  const handleSignin = () => {
-    if (!email.includes('@') || password.length < 8) {
-      setError(true);
-    } else {
-      // 로그인 로직을 여기에 작성하세요.
-      // 로그인이 성공적으로 완료되면 JWT를 로컬 스토리지에 저장하고 /todo 경로로 리다이렉트합니다.
-      const jwtToken = '여기에 JWT 토큰을 저장하세요';
-      localStorage.setItem('jwtToken', jwtToken);
-      navigate('/todo');
-    }
-  };
+  
 
   return (
     <>
