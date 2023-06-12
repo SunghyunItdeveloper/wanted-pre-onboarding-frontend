@@ -102,12 +102,7 @@
     - 제출버튼을 누르면 수정한 내용을 제출해서 내용이 업데이트
     - 취소버튼을 누르면 수정한 내용을 초기화 하고, 수정모드를 비활성화함
     - CRUD 조건에 맞추었음
-        
-        ```markdown
-        `<input data-testid="modify-input" />
-        <button data-testid="submit-button">제출</button>
-        <button data-testid="cancel-button">취소</button>`
-        ```
+      
         
 
 ![](https://velog.velcdn.com/images/ash5541/post/f7573219-e690-4448-9187-93ea23059480/image.gif)
