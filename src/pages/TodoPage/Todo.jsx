@@ -13,8 +13,8 @@ import {
 // API 함수 import
 import { createTodo, getTodos, updateTodo, deleteTodo } from '../../api/api';
 import { useNavigate } from 'react-router-dom';
-import { NeedpublicAuth } from '../../components/auth/AuthCondition';
 import axiosinstance from '../../api/AxiosInstance';
+import { NeedpublicAuth } from '../../components/auth/AuthCondition';
 
 const Todo = () => {
   NeedpublicAuth()
@@ -40,7 +40,7 @@ const Todo = () => {
         setTodos([...todos, response]); // 응답 데이터를 todos에 추가
         setInput('');
 
-
+        // 변경된 todos를 localStorage에 저장
       } catch (error) {
         console.error('Todo 생성 요청 실패:', error);
       }
@@ -58,14 +58,14 @@ const Todo = () => {
         // 토큰이 로컬 스토리지에 저장된 후에 API 요청을 수행합니다.
         const accessToken = localStorage.getItem('jwtToken');
         axiosinstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-
+  
         const response = await axiosinstance.get('todos');
         setTodos(response.data);
       } catch (error) {
         console.error('Todo 목록 조회 요청 실패:', error);
       }
     };
-
+  
     fetchInitialTodos();
   }, []);
 

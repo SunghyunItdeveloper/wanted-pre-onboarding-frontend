@@ -17,7 +17,7 @@ export const NeedAuth = () => {
   useEffect(() => {
     const accessToken = localStorage.getItem('jwtToken')
     if (accessToken) {
-      navigate("/todos")
+      navigate("/todo")
     }
   }, [navigate])
 }

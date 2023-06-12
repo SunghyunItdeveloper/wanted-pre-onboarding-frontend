@@ -1,8 +1,8 @@
 
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Membership from "./constant/signupPage/Membership";
-import Login from "./constant/sigininPage/Login";
-import Todo from "./constant/TodoPage/Todo";
+import Membership from "./pages/signupPage/Membership";
+import Login from "./pages/sigininPage/Login";
+import Todo from "./pages/TodoPage/Todo";
 
 function App() {
   return (
