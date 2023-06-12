@@ -71,7 +71,7 @@ const Membership = () => {
               회원가입 완료
             </button>
           </ButtonContainer>
-          <LoginWith>또는 간편로그인</LoginWith>
+          <LoginWith onClick={()=>{navigate('/signin');}}>로그인하러가기</LoginWith>
           <HorizontalRule />
           <ForgotPassword>비밀번호를 잊어버리셨나요?</ForgotPassword>
         </MembershipWrap>

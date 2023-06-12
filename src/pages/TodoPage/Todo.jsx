@@ -55,17 +55,16 @@ const Todo = () => {
   useEffect(() => {
     const fetchInitialTodos = async () => {
       try {
-        // 토큰이 로컬 스토리지에 저장된 후에 API 요청을 수행합니다.
         const accessToken = localStorage.getItem('jwtToken');
         axiosinstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-  
+
         const response = await axiosinstance.get('todos');
         setTodos(response.data);
       } catch (error) {
         console.error('Todo 목록 조회 요청 실패:', error);
       }
     };
-  
+
     fetchInitialTodos();
   }, []);
 
