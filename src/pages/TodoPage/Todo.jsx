@@ -8,6 +8,8 @@ import {
   ModifyInput,
   SubmitButton,
   CancelButton,
+  LogButtonWrap,
+  LogButton,
 } from './Todo.style';
 
 // API 함수 import
@@ -81,6 +83,7 @@ const Todo = () => {
       });
       const updatedTodos = todos.filter((_, i) => i !== index);
       setTodos(updatedTodos);
+      alert('삭제 되었습니다')
     } catch (error) {
       console.error('Todo 삭제 요청 실패:', error);
     }
@@ -128,6 +131,7 @@ const Todo = () => {
         setEditContents(false);
         setModifyIndex(-1);
         setTextModify('');
+        alert('수정이 되었습니다')
       } catch (error) {
         console.error('Todo 업데이트 요청 실패:', error);
       }
@@ -142,8 +146,10 @@ const Todo = () => {
 
   return (
     <TodoContainer>
+      <LogButtonWrap>
+      <LogButton onClick={LogoutUse}>로그아웃</LogButton>
+      </LogButtonWrap>
       <TodoWrapper>
-      <button onClick={LogoutUse}>로그아웃</button>
         <h2>TodoList</h2>
         <div>
           <TodoInput

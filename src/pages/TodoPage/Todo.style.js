@@ -2,10 +2,27 @@ import styled from "styled-components";
 export const TodoContainer = styled.div`
 background-color: aliceblue;
 display: flex;
-width: 1250px;
+width: 100%;
 margin: 0 auto;
 justify-content: center;
+flex-direction: column;
   `
+export const LogButtonWrap = styled.div`
+display: flex;
+margin: 20px 0px;
+`
+export const LogButton = styled.button`
+border-radius: 20px;
+background-color: aquamarine;
+padding: 10px;
+border: none;
+&:hover {
+    transform: translateY(-20px);
+    transition: all 0.3s linear;
+  }
+
+`
+
 export const TodoWrapper = styled.div`
 margin: 0 auto;
   display: flex;
@@ -53,6 +70,10 @@ margin: 0 auto;
   @media only screen and (max-width:1280px){
     width: 30vw;
     height: 80vh;
+  }
+  &:hover {
+    transform: translateY(-20px);
+    transition: all 0.3s linear;
   }
   `
 export const WelcomeText = styled.h2`

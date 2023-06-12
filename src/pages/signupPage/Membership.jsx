@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ButtonContainer, ForgotPassword, HorizontalRule, InputContainer, LoginWith, MembershipContainer, MembershipWrap, WelcomeText } from './Membership.style';
-import { StyledInput } from '../../components/common/input.style';
+import { StyledInput } from '../../styles/common/input.style';
 import axiosinstance from '../../api/AxiosInstance';
-import { POST_SIGNUP } from '../../api/apiUrl';
+import { POST_SIGNUP } from '../../api/authUrl';
 import { NeedAuth } from '../../components/auth/AuthCondition';
 
 const Membership = () => {

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ButtonContainer, ForgotPassword, HorizontalRule, InputContainer, LoginWith, MembershipContainer, MembershipWrap, WelcomeText } from '../signupPage/Membership.style';
-import { StyledInput } from '../../components/common/input.style';
+import { StyledInput } from '../../styles/common/input.style';
 import axiosinstance from '../../api/AxiosInstance';
 import { NeedAuth } from '../../components/auth/AuthCondition';
 
