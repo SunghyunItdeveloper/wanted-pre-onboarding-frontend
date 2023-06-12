@@ -33,14 +33,16 @@ const Todo = () => {
   //생성된 todos를 로컬 스토리지에 저장합니다.
   const handleTodoSubmit = async () => {
     if (input) {
-   //입력된 사항이 파라미터에 담김
       try {
         const newTodo = input;
-        const response = await createTodo(newTodo); // Todo 생성 요청
-        setTodos([...todos, response]); // 응답 데이터를 todos에 추가
+        const accessToken = localStorage.getItem('jwtToken');
+        const response = await axiosinstance.post('todos', { todo: newTodo }, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        setTodos([...todos, response.data]);
         setInput('');
-
-        // 변경된 todos를 localStorage에 저장
       } catch (error) {
         console.error('Todo 생성 요청 실패:', error);
       }
@@ -71,7 +73,12 @@ const Todo = () => {
   const handleTodoDelete = async (index) => {
     try {
       const todoId = todos[index].id;
-      await deleteTodo(todoId); // Todo 삭제 요청
+      const accessToken = localStorage.getItem('jwtToken');
+      await axiosinstance.delete(`todos/${todoId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       const updatedTodos = todos.filter((_, i) => i !== index);
       setTodos(updatedTodos);
     } catch (error) {
@@ -86,7 +93,12 @@ const Todo = () => {
         ...todos[index],
         isCompleted: !todos[index].isCompleted,
       };
-      await updateTodo(todoId, updatedTodo.todo, updatedTodo.isCompleted); // Todo 업데이트 요청
+      const accessToken = localStorage.getItem('jwtToken');
+      await axiosinstance.put(`todos/${todoId}`, updatedTodo, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       const updatedTodos = [...todos];
       updatedTodos[index].isCompleted = !updatedTodos[index].isCompleted;
       setTodos(updatedTodos);
