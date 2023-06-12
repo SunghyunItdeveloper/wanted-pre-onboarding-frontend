@@ -12,40 +12,55 @@ import {
 
 // API 함수 import
 import { createTodo, getTodos, updateTodo, deleteTodo } from '../../api/api';
+import { useNavigate } from 'react-router-dom';
+import { NeedpublicAuth } from '../../components/auth/AuthCondition';
+import axiosinstance from '../../api/AxiosInstance';
 
 const Todo = () => {
+  NeedpublicAuth()
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState('');
   const [EditContents, setEditContents] = useState(false);
   const [ModifyIndex, setModifyIndex] = useState(-1);
   const [TextModify, setTextModify] = useState('');
-
+  const navigate = useNavigate()
   const handleInputChange = (e) => {
     setInput(e.target.value);
   };
-
+  //새로운 Todo를 생성하여 서버에 전송하는 함수. 
+  //입력된 input 값을 createTodo 함수의 파라미터로 사용하여 Todo 생성 요청을 보냅니다. 
+  //응답으로 받은 데이터를 todos 상태에 추가하고, input을 초기화합니다. 
+  //생성된 todos를 로컬 스토리지에 저장합니다.
   const handleTodoSubmit = async () => {
     if (input) {
-      console.log(input)
+   //입력된 사항이 파라미터에 담김
       try {
-        const newTodo = { todo: input };
+        const newTodo = input;
         const response = await createTodo(newTodo); // Todo 생성 요청
         setTodos([...todos, response]); // 응답 데이터를 todos에 추가
         setInput('');
 
-        // 변경된 todos를 localStorage에 저장
-        localStorage.setItem('todos', JSON.stringify([...todos, response]));
+
       } catch (error) {
         console.error('Todo 생성 요청 실패:', error);
       }
     }
   };
+  const LogoutUse = () =>{
+    localStorage.removeItem("jwtToken");
+    alert("로그아웃 완료")
+    navigate('/signin')
+  }
 
   useEffect(() => {
     const fetchInitialTodos = async () => {
       try {
-        const todos = await getTodos(); // Todo 목록 조회 요청
-        setTodos(todos);
+        // 토큰이 로컬 스토리지에 저장된 후에 API 요청을 수행합니다.
+        const accessToken = localStorage.getItem('jwtToken');
+        axiosinstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
+        const response = await axiosinstance.get('todos');
+        setTodos(response.data);
       } catch (error) {
         console.error('Todo 목록 조회 요청 실패:', error);
       }
@@ -117,6 +132,7 @@ const Todo = () => {
   return (
     <TodoContainer>
       <TodoWrapper>
+      <button onClick={LogoutUse}>로그아웃</button>
         <h2>TodoList</h2>
         <div>
           <TodoInput

@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { ButtonContainer, ForgotPassword, HorizontalRule, InputContainer, LoginWith, MembershipContainer, MembershipWrap, WelcomeText } from '../signupPage/Membership.style';
 import { StyledInput } from '../../components/common/input.style';
 import axiosinstance from '../../api/AxiosInstance';
+import { NeedAuth } from '../../components/auth/AuthCondition';
 
 const Login = () => {
+  NeedAuth()
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,7 +26,7 @@ const Login = () => {
       setError(true);
     } else {
       try {
-        const response = await axiosinstance.post('/auth/signin', {
+        const response = await axiosinstance.post('auth/signin', {
           email,
           password,
         });
@@ -32,8 +34,9 @@ const Login = () => {
         const { access_token } = response.data;
         alert('로그인 성공하였습니다')
         console.log(response,'로그인성공')
-        localStorage.setItem('jwtToken', access_token);
-        navigate('/todo');
+    const  undefined1= localStorage.setItem('jwtToken', access_token);
+      console.log(undefined1)    
+    navigate('/todo');
       } catch (error) {
         setError(true);
         console.error('로그인 실패:', error);
@@ -72,7 +75,9 @@ const Login = () => {
               로그인
             </button>
           </ButtonContainer>
-          <LoginWith>Or 간편로그인</LoginWith>
+          <LoginWith onClick={()=>{
+            navigate('/signup')
+          }}>회원 가입</LoginWith>
           <HorizontalRule />
           <ForgotPassword>비밀번호를 잊어버리셨나요?</ForgotPassword>
         </MembershipWrap>

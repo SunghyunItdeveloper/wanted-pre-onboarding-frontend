@@ -4,8 +4,10 @@ import { ButtonContainer, ForgotPassword, HorizontalRule, InputContainer, LoginW
 import { StyledInput } from '../../components/common/input.style';
 import axiosinstance from '../../api/AxiosInstance';
 import { POST_SIGNUP } from '../../api/apiUrl';
+import { NeedAuth } from '../../components/auth/AuthCondition';
 
 const Membership = () => {
+  NeedAuth()
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
