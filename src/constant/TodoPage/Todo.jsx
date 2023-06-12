@@ -10,6 +10,9 @@ import {
   CancelButton,
 } from './Todo.style';
 
+// API 함수 import
+import { createTodo, getTodos, updateTodo, deleteTodo } from '../../api/api';
+
 const Todo = () => {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState('');
@@ -21,32 +24,61 @@ const Todo = () => {
     setInput(e.target.value);
   };
 
-  const handleTodoSubmit = () => {
+  const handleTodoSubmit = async () => {
     if (input) {
-      const newTodo = { text: input, completed: false };
-      setTodos([...todos, newTodo]);
-      setInput('');
-  
-      // 변경된 todos를 localStorage에 저장
-      localStorage.setItem('todos', JSON.stringify([...todos, newTodo])); 
+      console.log(input)
+      try {
+        const newTodo = { todo: input };
+        const response = await createTodo(newTodo); // Todo 생성 요청
+        setTodos([...todos, response]); // 응답 데이터를 todos에 추가
+        setInput('');
+
+        // 변경된 todos를 localStorage에 저장
+        localStorage.setItem('todos', JSON.stringify([...todos, response]));
+      } catch (error) {
+        console.error('Todo 생성 요청 실패:', error);
+      }
     }
   };
+
   useEffect(() => {
-    const storedTodos = localStorage.getItem('todos');
-    if (storedTodos) {
-      setTodos(JSON.parse(storedTodos));
-    }
+    const fetchInitialTodos = async () => {
+      try {
+        const todos = await getTodos(); // Todo 목록 조회 요청
+        setTodos(todos);
+      } catch (error) {
+        console.error('Todo 목록 조회 요청 실패:', error);
+      }
+    };
+
+    fetchInitialTodos();
   }, []);
 
-  const handleTodoDelete = (index) => {
-    const updatedTodos = todos.filter((_, i) => i !== index);
-    setTodos(updatedTodos);
+  const handleTodoDelete = async (index) => {
+    try {
+      const todoId = todos[index].id;
+      await deleteTodo(todoId); // Todo 삭제 요청
+      const updatedTodos = todos.filter((_, i) => i !== index);
+      setTodos(updatedTodos);
+    } catch (error) {
+      console.error('Todo 삭제 요청 실패:', error);
+    }
   };
 
-  const handleTodoToggle = (index) => {
-    const updatedTodos = [...todos];
-    updatedTodos[index].completed = !updatedTodos[index].completed;
-    setTodos(updatedTodos);
+  const handleTodoToggle = async (index) => {
+    try {
+      const todoId = todos[index].id;
+      const updatedTodo = {
+        ...todos[index],
+        isCompleted: !todos[index].isCompleted,
+      };
+      await updateTodo(todoId, updatedTodo.todo, updatedTodo.isCompleted); // Todo 업데이트 요청
+      const updatedTodos = [...todos];
+      updatedTodos[index].isCompleted = !updatedTodos[index].isCompleted;
+      setTodos(updatedTodos);
+    } catch (error) {
+      console.error('Todo 업데이트 요청 실패:', error);
+    }
   };
 
   const handleTodoModify = (index, text) => {
@@ -59,14 +91,20 @@ const Todo = () => {
     setTextModify(e.target.value);
   };
 
-  const handleModifySubmit = () => {
+  const handleModifySubmit = async () => {
     if (TextModify) {
-      const updatedTodos = [...todos];
-      updatedTodos[ModifyIndex].text = TextModify;
-      setTodos(updatedTodos);
-      setEditContents(false);
-      setModifyIndex(-1);
-      setTextModify('');
+      try {
+        const todoId = todos[ModifyIndex].id;
+        const updatedTodo = await updateTodo(todoId, TextModify, todos[ModifyIndex].isCompleted); // Todo 업데이트 요청
+        const updatedTodos = [...todos];
+        updatedTodos[ModifyIndex] = updatedTodo;
+        setTodos(updatedTodos);
+        setEditContents(false);
+        setModifyIndex(-1);
+        setTextModify('');
+      } catch (error) {
+        console.error('Todo 업데이트 요청 실패:', error);
+      }
     }
   };
 
@@ -91,20 +129,20 @@ const Todo = () => {
           </TodoButton>
           <ul>
             {todos.map((todo, index) => (
-              <TodoItem key={index}>
+              <TodoItem key={todo.id}>
                 <label>
                   <input
                     type="checkbox"
-                    checked={todo.completed}
+                    checked={todo.isCompleted}
                     onChange={() => handleTodoToggle(index)}
                   />
-                  <span>{todo.text}</span>
+                  <span>{todo.todo}</span>
                 </label>
                 {!EditContents && (
                   <>
                     <button
                       data-testid="modify-button"
-                      onClick={() => handleTodoModify(index, todo.text)}
+                      onClick={() => handleTodoModify(index, todo.todo)}
                     >
                       수정
                     </button>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { API_URL } from "./constant";
 
-const accessToken = localStorage.getItem("access_token")
+const accessToken = localStorage.getItem("jwtToken")
 const axiosinstance = axios.create({
   baseURL: API_URL,
   headers: {
